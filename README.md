@@ -120,3 +120,96 @@ docker exec jenkins-blueocean cat /var/jenkins_home/secrets/initialAdminPassword
 ```
 https://localhost:8080/
 ```
+
+
+## Jenkins Filesystem and Workspace
+
+```
+docker exec jenkins-blueocean bash
+```
+
+Then,
+
+```
+cd /var/jenkins_home
+```
+
+Then,
+
+```
+cd workspace
+```
+
+When you look at the directory with ls, you will see your project folder. And inside it, you will see
+the files that are used in build.
+
+
+## Setting up Docker Cloud Agents
+
+1) Go to "Manage Jenkins" tab on the Dashboard
+2) Select "Manage Nodes and Cloud"
+3) Then, select "Configure Clouds"
+4) Then, install the "Docker" plugin
+5) Then, select the restart after installation checkbox
+
+After restarting the Jenkins,
+
+1) Go to "Manage Jenkins" tab on the Dashboard
+2) Select "Manage Nodes and Cloud"
+3) Then, select Configure Clouds
+4) Then, "Add a new cloud", select Docker
+5) Then add Docker Cloud details, there is a couple of things that you need to do
+   - Docker Host URI: If you want to run docker within the jenkins, you could just use like 127.0.0.1. But, I want to run docker in my local machine. I do not want to run Docker with Jenkins.
+   To help proxy the connection from our Jenkins master container over to our localhost, 
+    ```
+    docker run -d --restart=always -p 127.0.0.1:2376:2375 --network jenkins -v /var/run/docker.sock:/var/run/docker.sock alpine/socat tcp-listen:2375,fork,reuseaddr unix-connect:/var/run/docker.sock
+    ```
+      Then, inspect the ip address socket container. It should be something like "127.23.0.3"
+    ```
+    docker inspect <container_name>
+    ```
+    I want to forward my connections for docker to this ip address.
+    
+    You need to input the following into Docker Host URI:
+    ```
+    tcp://172.23.0.3:2375
+    ```
+
+6) Then, apply and save it.
+7) Then, go to the cloud section again, and add Docker Agent template with the following settings:
+
+
+<p align="center">
+    <img src="images/jenkins5.png" alt="workflow" width="80%" height="%100" style="border-radius: 20px">
+</p>
+
+
+## CI/CD with Declarative Pipeline 
+
+Declarative Pipeline presents a more simplified and opinionated syntax on top of the Pipeline sub-systems.
+
+
+<p align="center">
+    <img src="images/jenkins6.png" alt="workflow" width="100%" height="%100" style="border-radius: 20px">
+</p>
+
+
+#### We write everything inside pipeline tag. We specified on which agent the pipeline will be executed. Remember we have created agent labeled as docker-agent-alpine. We can specify it in here.
+#### Then, we have a Stages -> Stage -> Steps.
+
+## CI/CD using Jenkinsfile
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

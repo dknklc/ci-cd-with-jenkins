@@ -41,6 +41,11 @@ An example workflow may look like this:
 4. It selects the appropriate agent based on labels which issomething that you can configure through the jenkins ui,
 5. The agent runs the build which is usually just a bunch of linux commands to build, test and distribute your code.
 
+## Jenkins Agent Types
+#### There are 2 main categories of jenkins agents.
+- #### Permanent Agents: You can think of these just as standalone linux or windows servers that are configured to run jenkins jobs. These are just basic everyday servers. The only real setup of them is you need to have java installed and you need to make sure that the ssh is set up. You will also want to make sure that you have any type of build tools that you want to use on these servers installed as the agents are going to be the workhorses that run your actual builds.
+- #### Cloud Agents: They are a much more popular choice in real world environments. Some examples of cloud agents are Docker, Kubernetes adn AWS Fleet manager. In these scenarios, jenkins can dynamically spin up agents based on the agent templates that you configure.                                                     
+
 ## Build Types
 
 <p align="center">
@@ -199,6 +204,9 @@ Declarative Pipeline presents a more simplified and opinionated syntax on top of
 
 ## CI/CD using Jenkinsfile
 
+<p align="center">
+    <img src="images/jenkins7.png" alt="workflow" width="100%" height="%100" style="border-radius: 20px">
+</p>
 
 
 
